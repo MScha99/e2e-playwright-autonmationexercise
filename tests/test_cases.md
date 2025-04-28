@@ -1,5 +1,30 @@
 # Automation Exercise Test Cases
 
+```tests/  
+├── auth/                         
+│   ├── register.spec.ts        # TC1, TC5  
+│   ├── login.spec.ts           # TC2, TC3  
+│   └── logout.spec.ts          # TC4  
+├── products/  
+│   ├── browsing.spec.ts        # TC8, TC18, TC19
+│   ├── search.spec.ts          # TC9, TC20
+│   └── reviews.spec.ts         # TC21  
+├── cart/  
+│   ├── management.spec.ts      # TC12, TC13, TC17  
+│   └── subscription.spec.ts    # TC10, TC11  
+├── checkout/  
+│   ├── orders.spec.ts          # TC14, TC15, TC16, TC23, TC24  
+│   └── payment.spec.ts  
+├── ui/  
+│   ├── contact.spec.ts         # TC6  
+│   ├── navigation.spec.ts      # TC7, TC25, TC26  
+│   └── recommended.spec.ts     # TC22  
+└── ... 
+```
+
+
+
+
 ## User Account Management
 
 ### TC-001: Register User
