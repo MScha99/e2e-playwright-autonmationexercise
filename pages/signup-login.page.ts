@@ -8,11 +8,13 @@ export class SignupLoginPage {
   readonly loginEmailField: Locator
   readonly loginPasswordField: Locator
   readonly loginButton: Locator
+  readonly errorIncorrectUserCredentials: Locator
   //register form
   readonly signupHeading: Locator
   readonly signupNameField: Locator
   readonly signupEmailField: Locator
   readonly signupButton: Locator
+  readonly errorEmailAlreadyExists: Locator
   //account information form (for registration)
   readonly enterAccountInformationHeading: Locator
   readonly radioTitleMr: Locator
@@ -54,6 +56,10 @@ export class SignupLoginPage {
       .filter({ hasText: 'Login' })
       .getByRole('textbox', { name: 'Password' })
     this.loginButton = page.getByRole('button', { name: 'Login' })
+
+    this.errorIncorrectUserCredentials = page.getByText(
+      'Your email or password is incorrect!'
+    )
     ////////////////
 
     ////////////////register form
@@ -69,6 +75,10 @@ export class SignupLoginPage {
       .filter({ hasText: 'Signup' })
       .getByRole('textbox', { name: 'Email Address' })
     this.signupButton = page.getByRole('button', { name: 'Signup' })
+
+    this.errorEmailAlreadyExists = page.getByText(
+      'Email Address already exist!'
+    )
     ////////////////
 
     ////////////////account information form (for registration)
@@ -118,9 +128,10 @@ export class SignupLoginPage {
     this.mobileNumberField = page.getByRole('textbox', {
       name: 'Mobile Number *',
     })
-    this.createAccountButton = page.getByRole('button', {
-      name: 'Create Account',
-    })
+    // this.createAccountButton = page.getByRole('button', {
+    //   name: 'Create Account',
+    // })
+    this.createAccountButton = page.locator('[data-qa="create-account"]')
     ////////////////
   }
 
@@ -129,29 +140,102 @@ export class SignupLoginPage {
     return new AccountCreatedPage(this.page)
   }
 
-  async fillNameEmailFields(name: string, email: string) {
+  async fillInitialSignupFormAndSubmit(name: string, email: string) {
     await this.signupNameField.fill(name)
     await this.signupEmailField.fill(email)
     await this.signupButton.click()
   }
 
-  async fillAccountInformation(
+  async fillLoginFormAndSubmit(email: string, password: string) {
+    await this.loginEmailField.fill(email)
+    await this.loginPasswordField.fill(password)
+    await this.loginButton.click()
+  }
+
+  //   async fillAccountInformation(
+  //     title: string,
+  //     //name: string,
+  //     // email: string,
+  //     password: string,
+  //     day: string,
+  //     month: string,
+  //     year: string,
+  //     subscribeNewsletter: boolean,
+  //     receiveSpecialOffers: boolean
+  //   ) {
+  //     if (title === 'Mr.') {
+  //       await this.radioTitleMr.check()
+  //     } else {
+  //       await this.radioTitleMrs.check()
+  //     }
+  //     //await this.nameField.fill(name)
+  //     // await this.accountInformationEmailField.fill(email)
+  //     await this.accountInformationPasswordField.fill(password)
+  //     await this.birthDayDropdown.selectOption(day)
+  //     await this.monthDayDropdown.selectOption(month)
+  //     await this.yearDayDropdown.selectOption(year)
+
+  //     if (subscribeNewsletter) {
+  //       await this.newsletterCheckbox.check()
+  //     }
+  //     if (receiveSpecialOffers) {
+  //       await this.specialOffersCheckbox.check()
+  //     }
+  //   }
+
+  //   async fillAddressInformation(
+  //     firstName: string,
+  //     lastName: string,
+  //     company: string,
+  //     address: string,
+  //     address2: string,
+  //     country: string,
+  //     state: string,
+  //     city: string,
+  //     zipCode: string,
+  //     mobileNumber: string
+  //   ) {
+  //     await this.firstNameField.fill(firstName)
+  //     await this.lastNameField.fill(lastName)
+  //     await this.companyField.fill(company)
+  //     await this.addressField.fill(address)
+  //     await this.address2Field.fill(address2)
+  //     await this.countryDropdown.selectOption(country)
+  //     await this.stateField.fill(state)
+  //     await this.cityField.fill(city)
+  //     await this.zipCodeField.fill(zipCode)
+  //     await this.mobileNumberField.fill(mobileNumber)
+  //   }
+  // }
+
+  async fillOutRegistrationForm(
+
     title: string,
-    name: string,
+    //name: string,
     // email: string,
     password: string,
     day: string,
     month: string,
     year: string,
     subscribeNewsletter: boolean,
-    receiveSpecialOffers: boolean
+    receiveSpecialOffers: boolean,
+    firstName: string,
+    lastName: string,
+    company: string,
+    address: string,
+    address2: string,
+    country: string,
+    state: string,
+    city: string,
+    zipCode: string,
+    mobileNumber: string
   ) {
     if (title === 'Mr.') {
       await this.radioTitleMr.check()
     } else {
       await this.radioTitleMrs.check()
     }
-    await this.nameField.fill(name)
+    //await this.nameField.fill(name)
     // await this.accountInformationEmailField.fill(email)
     await this.accountInformationPasswordField.fill(password)
     await this.birthDayDropdown.selectOption(day)
@@ -164,20 +248,6 @@ export class SignupLoginPage {
     if (receiveSpecialOffers) {
       await this.specialOffersCheckbox.check()
     }
-  }
-
-  async fillAddressInformation(
-    firstName: string,
-    lastName: string,
-    company: string,
-    address: string,
-    address2: string,
-    country: string,
-    state: string,
-    city: string,
-    zipCode: string,
-    mobileNumber: string
-  ) {
     await this.firstNameField.fill(firstName)
     await this.lastNameField.fill(lastName)
     await this.companyField.fill(company)

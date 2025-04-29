@@ -24,7 +24,10 @@ export const AccountInformation = {
       mobileNumber: '+91 9876543210',
     },
   },
-  invalid: {},
+  invalid: {
+    email: 'abecadl@gmail.com',
+    pasword: '123blabla123',
+  },
 }
 
 export function generateUniqueEmail(baseEmail = 'abecadlo@gmail.com') {

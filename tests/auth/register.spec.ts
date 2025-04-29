@@ -4,8 +4,8 @@ import { AccountInformation, generateUniqueEmail } from '../../config/test_data'
 import { HeaderComponent } from '../../components/header.component'
 import { AppUrls } from '../../config/urls'
 import { SignupLoginPage } from '../../pages/signup-login.page'
-import { AccountCreatedPage } from '../../pages/account-created.page'
 import { AccountDeletedPage } from '../../pages/account-deleted.page'
+import { createUserAccount } from '../../utils/accountUtils'
 //TC-001: Register User, TC-005: Register User with existing email
 
 test.describe('Register user', () => {
@@ -16,32 +16,25 @@ test.describe('Register user', () => {
     await page.goto(AppUrls.BASE_URL)
     headerComponent = new HeaderComponent(page)
     signupLoginPage = await headerComponent.openSignupLoginPage()
+    await expect(signupLoginPage.signupHeading).toBeVisible()
   })
 
   test('TC001 Register User', async ({ page }) => {
-    await test.step('go to signup/login page, fill out the registration form and proceed', async () => {
+    await test.step('fill out account information and address information forms, proceed and verify success', async () => {
       await expect(signupLoginPage.signupHeading).toBeVisible()
 
-      await signupLoginPage.fillNameEmailFields(
+      await createUserAccount(
+        page,
         AccountInformation.valid.name,
-        generateUniqueEmail()
-      )
-    })
-    await test.step('fill out account information and address information forms, then proceed', async () => {
-      await expect(signupLoginPage.enterAccountInformationHeading).toBeVisible()
-
-      await signupLoginPage.fillAccountInformation(
+        generateUniqueEmail(),
         AccountInformation.valid.title,
-        AccountInformation.valid.name,
+        // AccountInformation.valid.name,
         AccountInformation.valid.password,
         AccountInformation.valid.dateOfBirth.day,
         AccountInformation.valid.dateOfBirth.month,
         AccountInformation.valid.dateOfBirth.year,
         AccountInformation.valid.newsletter,
-        AccountInformation.valid.specialOffers
-      )
-
-      await signupLoginPage.fillAddressInformation(
+        AccountInformation.valid.specialOffers,
         AccountInformation.valid.address.firstName,
         AccountInformation.valid.address.lastName,
         AccountInformation.valid.address.company,
@@ -53,20 +46,23 @@ test.describe('Register user', () => {
         AccountInformation.valid.address.zipcode,
         AccountInformation.valid.address.mobileNumber
       )
-
-      await signupLoginPage.createAccountButton.click()
     })
 
-    await test.step('verify account creation, logged-in status and delete this account', async () => {
-      const accountCreatedPage = new AccountCreatedPage(page)
+    await test.step('Delete this account', async () => {
       const accountDeletedPage = new AccountDeletedPage(page)
 
-      await expect(accountCreatedPage.accountCreatedConfirmation).toBeVisible()
-      await accountCreatedPage.continueButton.click()
-      await expect(headerComponent.loggedInAsUsername).toBeVisible()
       await headerComponent.deleteAccountButton.click()
       await expect(accountDeletedPage.accountDeletedConfirmation).toBeVisible()
       await accountDeletedPage.continueButton.click()
     })
+  })
+
+  test('TC005 Register User with existing email', async ({ page }) => {
+    await signupLoginPage.fillInitialSignupFormAndSubmit(
+      AccountInformation.valid.name,
+      AccountInformation.valid.takenEmail
+    )
+
+    await expect(signupLoginPage.errorEmailAlreadyExists).toBeVisible()
   })
 })
