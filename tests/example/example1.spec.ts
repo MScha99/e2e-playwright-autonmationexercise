@@ -1,8 +1,13 @@
 import { test, expect } from '@playwright/test'
 import { AppUrls } from '../../config/urls'
+import { SignupLoginPage } from '../../pages/signup-login.page'
 
-test('click accept cookies', async ({ page }) => {
-  await page.goto(AppUrls.BASE_URL)
+test('TESTOWY TEMPORARY', async ({ page }) => {
+  const signupLoginPage = new SignupLoginPage(page)
 
-  await page.getByRole('link').filter({ hasText: /Polo/ }).click()
+  await page.goto('https://www.automationexercise.com/login')
+
+  await expect(signupLoginPage.loginEmailField).toBeVisible()
+
+  
 })
