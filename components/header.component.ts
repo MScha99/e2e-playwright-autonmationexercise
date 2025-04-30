@@ -8,6 +8,7 @@ export class HeaderComponent {
   readonly cartPageLink: Locator
   readonly signupLoginPageLink: Locator
   readonly contactUsPageLink: Locator
+  readonly testCasesPageLink: Locator
   readonly loggedInAsUsername: Locator
   readonly logoutButton: Locator
   readonly deleteAccountButton: Locator
@@ -26,6 +27,8 @@ export class HeaderComponent {
     this.contactUsPageLink = page
       .getByRole('listitem')
       .filter({ hasText: 'Contact us' })
+
+    this.testCasesPageLink = page.getByRole('link', { name: ' Test Cases' })
 
     this.loggedInAsUsername = page.getByText('Logged in as ')
 

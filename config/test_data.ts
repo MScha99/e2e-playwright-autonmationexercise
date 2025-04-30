@@ -34,3 +34,14 @@ export function generateUniqueEmail(baseEmail = 'abecadlo@gmail.com') {
   const [name, domain] = baseEmail.split('@')
   return `${name}+${Date.now()}@${domain}`
 }
+
+export const contactUsInformation = {
+  name: 'John Doe',
+  email: 'johndoe@example.com',
+  subject: 'Inquiry about services',
+  message: 'I would like to know more about your services. Please provide details.',
+}
+
+export const products ={
+  queryForProductSearch: "pink"
+}
