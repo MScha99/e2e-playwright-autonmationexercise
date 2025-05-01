@@ -5,4 +5,5 @@ export class AppUrls {
   static readonly TEST_CASES = `${AppUrls.BASE_URL}test_cases`
   static readonly PRODUCTS = `${AppUrls.BASE_URL}products`
   static readonly PRODUCT_DETAILS = new RegExp(`${AppUrls.BASE_URL}product_details/\\d+$`)
+  static readonly CATEGORY_PRODUCTS = new RegExp(`${AppUrls.BASE_URL}category_products/\\d+$`)
 }

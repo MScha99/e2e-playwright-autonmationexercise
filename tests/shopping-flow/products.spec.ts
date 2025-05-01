@@ -2,15 +2,15 @@ import { test, expect, type Page } from '@playwright/test'
 import { AppUrls } from '../../config/urls'
 import { HeaderComponent } from '../../components/header.component'
 import { ProductsPage } from '../../pages/products.page'
-import { ProductDetailsPage } from '../../pages/productDetails.page'
+import { ProductDetailsPage } from '../../pages/product-details.page'
 import { products } from '../../config/test_data'
-
+import { HomePage } from '../../pages/home.page'
 
 test.beforeEach(async ({ page }) => {
   await page.goto(AppUrls.BASE_URL)
 })
 
-test.describe('Products page and product details', () => {
+test.describe('Browsing products', () => {
   let productsPage: ProductsPage
   let headerComponent: HeaderComponent
 
@@ -40,11 +40,51 @@ test.describe('Products page and product details', () => {
       await expect(productDetailsPage.brand).toBeVisible()
     })
   })
-  test('TC009 Search product', async ({
-    page,
-  }) => {
+  test('TC009 Search product', async ({ page }) => {
     await productsPage.searchForProduct(products.queryForProductSearch)
     await expect(productsPage.searchedProductsHeading).toBeVisible()
-    await productsPage.verifySearchResultsAgainstQuery(products.queryForProductSearch)
+    await productsPage.verifySearchResultsAgainstQuery(
+      products.queryForProductSearch
+    )
+  })
+})
+
+test('TC-018 View Category Products from Homepage', async ({ page }) => {
+  const homepage = new HomePage(page)
+
+  await test.step('Click on category (Women), then on a subcategory (dress), and verify that correct heading is displayed', async () => {
+    const categoryName = await homepage.selectNthProductCategory(0)
+    const subcategoryName = await homepage.selectNthProductSubcategory(0)
+    await homepage.verifySelectedCategoryAndSubcategory(
+      categoryName,
+      subcategoryName
+    )
+  })
+  await test.step('click on a different category (men) and subcategory (tshirts), then verify that correct heading is displayed', async () => {
+    const categoryName = await homepage.selectNthProductCategory(1)
+    const subcategoryName = await homepage.selectNthProductSubcategory(0)
+    await homepage.verifySelectedCategoryAndSubcategory(
+      categoryName,
+      subcategoryName
+    )
+  })
+})
+
+test.describe('Cart functionality', () => {
+  test.beforeEach(async ({ page }) => {})
+
+  test('TC002 Login User with correct email and password', async ({ page }) => {
+    await test.step('todo', async () => {})
+    await test.step('todo', async () => {})
+
+    await test.step('todo', async () => {})
+  })
+  test('TC003 Login User with incorrect email and password', async ({
+    page,
+  }) => {
+    await test.step('todo', async () => {})
+    await test.step('todo', async () => {})
+
+    await test.step('todo', async () => {})
   })
 })
