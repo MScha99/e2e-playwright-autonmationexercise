@@ -1,4 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test'
+import { CategoryComponent } from '../components/category.component'
+import { BramdComponent } from '../components/brand.component.'
 
 export class ProductsPage {
   readonly page: Page
@@ -8,9 +10,13 @@ export class ProductsPage {
   readonly searchProductField: Locator
   readonly searchProductButton: Locator
   readonly searchedProductsHeading: Locator
+  readonly categoryComponent: CategoryComponent
+  readonly brandCOmponent: BramdComponent
 
   constructor(page: Page) {
     this.page = page
+    this.categoryComponent = new CategoryComponent(page)
+    this.brandCOmponent = new BramdComponent(page)
     this.productsList = page.getByText('All Products  Added! Your')
     this.searchedProductsList = page.getByText('Searched Products  Added!')
     this.viewFirstProduct = page.getByText('View Product').first()

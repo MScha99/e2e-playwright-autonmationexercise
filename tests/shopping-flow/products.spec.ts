@@ -5,6 +5,7 @@ import { ProductsPage } from '../../pages/products.page'
 import { ProductDetailsPage } from '../../pages/product-details.page'
 import { products } from '../../config/test_data'
 import { HomePage } from '../../pages/home.page'
+import { BrandProductsPage } from '../../pages/brand-products.page'
 
 test.beforeEach(async ({ page }) => {
   await page.goto(AppUrls.BASE_URL)
@@ -53,20 +54,40 @@ test('TC-018 View Category Products from Homepage', async ({ page }) => {
   const homepage = new HomePage(page)
 
   await test.step('Click on category (Women), then on a subcategory (dress), and verify that correct heading is displayed', async () => {
-    const categoryName = await homepage.selectNthProductCategory(0)
-    const subcategoryName = await homepage.selectNthProductSubcategory(0)
-    await homepage.verifySelectedCategoryAndSubcategory(
+    await expect(homepage.categoryComponent.categoryList).toBeVisible()
+    const categoryName =
+      await homepage.categoryComponent.selectNthProductCategory(0)
+    const subcategoryName =
+      await homepage.categoryComponent.selectNthProductSubcategory(0)
+    await homepage.categoryComponent.verifySelectedCategoryAndSubcategory(
       categoryName,
       subcategoryName
     )
   })
   await test.step('click on a different category (men) and subcategory (tshirts), then verify that correct heading is displayed', async () => {
-    const categoryName = await homepage.selectNthProductCategory(1)
-    const subcategoryName = await homepage.selectNthProductSubcategory(0)
-    await homepage.verifySelectedCategoryAndSubcategory(
+    const categoryName =
+      await homepage.categoryComponent.selectNthProductCategory(1)
+    const subcategoryName =
+      await homepage.categoryComponent.selectNthProductSubcategory(0)
+    await homepage.categoryComponent.verifySelectedCategoryAndSubcategory(
       categoryName,
       subcategoryName
     )
+  })
+})
+
+test('TC-019 View Brand Products from Products page', async ({ page }) => {
+  const productsPage = new ProductsPage(page)
+  const headerComponent = new HeaderComponent(page)
+
+  await test.step('Click on brand (polo), and verify that correct heading is displayed', async () => {
+    await headerComponent.productPageLink.click()
+    const brandName = await productsPage.brandCOmponent.selectNthProductBrand(0)
+    await productsPage.brandCOmponent.verifySelectedBrand(brandName)
+  })
+  await test.step('click on a different brand (babyhug), then verify that correct heading is displayed', async () => {
+    const brandName = await productsPage.brandCOmponent.selectNthProductBrand(4)
+    await productsPage.brandCOmponent.verifySelectedBrand(brandName)
   })
 })
 
