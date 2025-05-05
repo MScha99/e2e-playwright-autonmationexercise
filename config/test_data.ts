@@ -39,9 +39,16 @@ export const contactUsInformation = {
   name: 'John Doe',
   email: 'johndoe@example.com',
   subject: 'Inquiry about services',
-  message: 'I would like to know more about your services. Please provide details.',
+  message:
+    'I would like to know more about your services. Please provide details.',
 }
 
-export const products ={
-  queryForProductSearch: "pink"
+export const products = {
+  queryForProductSearch: 'pink',
+  reviewForm: {
+    name: 'jon smith',
+    email: 'abecadl@gmail.com',
+    review:
+      'Great product! High quality and exactly as described. Highly recommend!',
+  },
 }

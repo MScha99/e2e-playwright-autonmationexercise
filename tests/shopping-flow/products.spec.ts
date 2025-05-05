@@ -5,13 +5,12 @@ import { ProductsPage } from '../../pages/products.page'
 import { ProductDetailsPage } from '../../pages/product-details.page'
 import { products } from '../../config/test_data'
 import { HomePage } from '../../pages/home.page'
-import { BrandProductsPage } from '../../pages/brand-products.page'
 
 test.beforeEach(async ({ page }) => {
   await page.goto(AppUrls.BASE_URL)
 })
 
-test.describe('Browsing products', () => {
+test.describe('Browsing, inspecting and reviewing products', () => {
   let productsPage: ProductsPage
   let headerComponent: HeaderComponent
 
@@ -41,12 +40,29 @@ test.describe('Browsing products', () => {
       await expect(productDetailsPage.brand).toBeVisible()
     })
   })
-  test('TC009 Search product', async ({ page }) => {
+  test('TC-009 Search product', async ({ page }) => {
     await productsPage.searchForProduct(products.queryForProductSearch)
     await expect(productsPage.searchedProductsHeading).toBeVisible()
     await productsPage.verifySearchResultsAgainstQuery(
       products.queryForProductSearch
     )
+  })
+  test('TC-021 Add a review on product', async ({ page }) => {
+    await test.step('Verify product list visibility, then move to details page of first product', async () => {
+      await expect(productsPage.productsList).toBeVisible()
+      await productsPage.viewFirstProduct.click()
+      await expect(page).toHaveURL(AppUrls.PRODUCT_DETAILS)
+    })
+    await test.step('Verify Review form is visible, then fill it out and submit it', async () => {
+      const productDetailsPage = new ProductDetailsPage(page)
+      await expect(productDetailsPage.writeYourReviewHeading).toBeVisible()
+      await productDetailsPage.reviewNameField.fill(products.reviewForm.name)
+      await productDetailsPage.reviewEmailField.fill(products.reviewForm.email)
+      await productDetailsPage.reviewTextField.fill(products.reviewForm.review)
+      await productDetailsPage.submitReviewButton.click()
+      await expect(productDetailsPage.reviewSubmitConfirmationText).toBeVisible()
+
+    })
   })
 })
 

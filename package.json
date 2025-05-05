@@ -12,6 +12,8 @@
     "@types/node": "^22.15.2"
   },
   "dependencies": {
+    "@ghostery/adblocker-playwright": "^2.5.2",
+    "cross-fetch": "^4.1.0",
     "playwright-automationexercise": "file:"
   }
 }

@@ -8,6 +8,12 @@ export class ProductDetailsPage {
   readonly productAvailability: Locator
   readonly productCondition: Locator
   readonly brand: Locator
+  readonly writeYourReviewHeading: Locator
+  readonly reviewNameField: Locator
+  readonly reviewEmailField: Locator
+  readonly reviewTextField: Locator
+  readonly submitReviewButton: Locator
+  readonly reviewSubmitConfirmationText: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -22,5 +28,11 @@ export class ProductDetailsPage {
     this.productAvailability = page.getByText(/^Availability: .+/)
     this.productCondition = page.getByText(/^Condition: .+/)
     this.brand = page.getByText(/^Brand: .+/)
+    this.writeYourReviewHeading = page.getByRole('link', { name: 'Write Your Review' })
+    this.reviewNameField = page.getByRole('textbox', { name: 'Your Name' })
+    this.reviewEmailField = page.getByRole('textbox', { name: 'Email Address', exact: true })
+    this.reviewTextField = page.getByRole('textbox', { name: 'Add Review Here!' })
+    this.submitReviewButton = page.getByRole('button', { name: 'Submit' })
+    this.reviewSubmitConfirmationText = page.getByText('Thank you for your review')
   }
 }
