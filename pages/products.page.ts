@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 import { CategoryComponent } from '../components/category.component'
 import { BramdComponent } from '../components/brand.component.'
+import { CartModalComponent } from '../components/cart-modal.component'
 
 export class ProductsPage {
   readonly page: Page
@@ -11,12 +12,15 @@ export class ProductsPage {
   readonly searchProductButton: Locator
   readonly searchedProductsHeading: Locator
   readonly categoryComponent: CategoryComponent
-  readonly brandCOmponent: BramdComponent
+  readonly brandComponent: BramdComponent
+  readonly cartModalComponent: CartModalComponent
+  readonly testowy: Locator
 
   constructor(page: Page) {
     this.page = page
     this.categoryComponent = new CategoryComponent(page)
-    this.brandCOmponent = new BramdComponent(page)
+    this.brandComponent = new BramdComponent(page)
+    this.cartModalComponent = new CartModalComponent(page)
     this.productsList = page.getByText('All Products  Added! Your')
     this.searchedProductsList = page.getByText('Searched Products  Added!')
     this.viewFirstProduct = page.getByText('View Product').first()
@@ -25,6 +29,10 @@ export class ProductsPage {
     })
     this.searchProductButton = page.getByRole('button', { name: '' })
     this.searchedProductsHeading = page.getByText('SEARCHED PRODUCTS')
+    this.testowy = this.page
+      .locator('.single-products')
+      .nth(0)
+      .locator('.btn btn-default add-to-cart')
   }
 
   async searchForProduct(query: string) {
@@ -44,5 +52,55 @@ export class ProductsPage {
     expect(
       texts.every((text) => text.toLowerCase().includes(lowerQuery))
     ).toBeTruthy()
+  }
+  async addNthItemToCart(
+    nth: number
+  ): Promise<{ description: string; price: string }> {
+    const singleProductCell = this.page.locator('.single-products').nth(nth)
+
+    await singleProductCell.evaluate((el) => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+
+    await singleProductCell.hover({ trial: true })
+    await this.page.waitForSelector('.product-overlay:visible', {
+      state: 'attached',
+      timeout: 5000,
+    })
+    await singleProductCell.hover({ force: true })
+
+    const description = await singleProductCell
+    .locator('.overlay-content > p')
+    .textContent()
+
+    const price = await singleProductCell
+      .locator('.overlay-content')
+      .getByRole('heading')
+      .textContent()
+  
+    // await singleProductCell.locator('.overlay-content').getByRole('button', {name: 'Add to cart'}).click()
+    // await singleProductCell.getByRole('button', {name: 'Add to cart'}).click()
+    await singleProductCell.evaluate((el) => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+
+    await singleProductCell.hover({ force: true })
+    await singleProductCell.hover({ force: true })
+    await this.page.waitForSelector('.product-overlay:visible', {
+      state: 'attached',
+      timeout: 5000,
+    })
+    await singleProductCell
+      .locator('.overlay-content a.add-to-cart')
+      .click({ force: true })
+    await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
+
+    if (!description || !price) {
+      throw new Error('Failed to extract product details')
+    }
+    return {
+      description,
+      price,
+    }
   }
 }

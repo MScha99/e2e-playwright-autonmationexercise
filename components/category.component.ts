@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 
 export class CategoryComponent {
-
+  readonly page: Page
   readonly categoryList: Locator
   readonly categoryWomen: Locator
   readonly categoryOfProducts: Locator
@@ -9,7 +9,6 @@ export class CategoryComponent {
   readonly categoryAndSubcategoryHeading: Locator
 
   constructor(page: Page) {
-
     this.categoryList = page.locator('.panel-group.category-products')
 
     this.categoryWomen = page

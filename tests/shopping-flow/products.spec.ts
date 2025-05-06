@@ -5,6 +5,8 @@ import { ProductsPage } from '../../pages/products.page'
 import { ProductDetailsPage } from '../../pages/product-details.page'
 import { products } from '../../config/test_data'
 import { HomePage } from '../../pages/home.page'
+import { CartPage } from '../../pages/cart.page'
+import { enableAdblock } from '../../utils/adblock'
 
 test.beforeEach(async ({ page }) => {
   await page.goto(AppUrls.BASE_URL)
@@ -60,8 +62,9 @@ test.describe('Browsing, inspecting and reviewing products', () => {
       await productDetailsPage.reviewEmailField.fill(products.reviewForm.email)
       await productDetailsPage.reviewTextField.fill(products.reviewForm.review)
       await productDetailsPage.submitReviewButton.click()
-      await expect(productDetailsPage.reviewSubmitConfirmationText).toBeVisible()
-
+      await expect(
+        productDetailsPage.reviewSubmitConfirmationText
+      ).toBeVisible()
     })
   })
 })
@@ -98,23 +101,51 @@ test('TC-019 View Brand Products from Products page', async ({ page }) => {
 
   await test.step('Click on brand (polo), and verify that correct heading is displayed', async () => {
     await headerComponent.productPageLink.click()
-    const brandName = await productsPage.brandCOmponent.selectNthProductBrand(0)
-    await productsPage.brandCOmponent.verifySelectedBrand(brandName)
+    const brandName = await productsPage.brandComponent.selectNthProductBrand(0)
+    await productsPage.brandComponent.verifySelectedBrand(brandName)
   })
   await test.step('click on a different brand (babyhug), then verify that correct heading is displayed', async () => {
-    const brandName = await productsPage.brandCOmponent.selectNthProductBrand(4)
-    await productsPage.brandCOmponent.verifySelectedBrand(brandName)
+    const brandName = await productsPage.brandComponent.selectNthProductBrand(4)
+    await productsPage.brandComponent.verifySelectedBrand(brandName)
   })
 })
 
 test.describe('Cart functionality', () => {
-  test.beforeEach(async ({ page }) => {})
+  test.beforeEach(async ({ page }) => {
+    // await enableAdblock(page)
+  })
 
-  test('TC002 Login User with correct email and password', async ({ page }) => {
-    await test.step('todo', async () => {})
-    await test.step('todo', async () => {})
+  test('TC-012 Add product in cart', async ({ page }) => {
+    const headerComponent = new HeaderComponent(page)
+    const productsPage = new ProductsPage(page)
+    const cartPage = new CartPage(page)
+    let firstItemAddedToCart: { description: string; price: string }
+    let secondItemAddedToCart: { description: string; price: string }
+    // let itemInsideCart
 
-    await test.step('todo', async () => {})
+    await test.step('Head to products page, add first displayed product to cart, and continue shopping', async () => {
+      await headerComponent.productPageLink.click()
+      firstItemAddedToCart = await productsPage.addNthItemToCart(0)
+      await productsPage.cartModalComponent.continueShoppingButton.click()
+    })
+    await test.step('Add  second displayed product to cart and view cart content', async () => {
+      secondItemAddedToCart = await productsPage.addNthItemToCart(1)
+      await productsPage.cartModalComponent.viewCartLink.click()
+    })
+
+    await test.step('verify both products were added to cart with correct details', async () => {
+      let { description: nameOfItemInsideCart } =
+        await cartPage.checkCartItemDetails(firstItemAddedToCart.description)
+
+      expect(nameOfItemInsideCart).toBe(firstItemAddedToCart.description)
+
+      let { description: nameOfAnotherItemInsideCart } =
+        await cartPage.checkCartItemDetails(secondItemAddedToCart.description)
+
+      expect(nameOfAnotherItemInsideCart).toBe(
+        secondItemAddedToCart.description
+      )
+    })
   })
   test('TC003 Login User with incorrect email and password', async ({
     page,
