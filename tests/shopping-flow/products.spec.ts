@@ -172,28 +172,60 @@ test.describe('Cart functionality', () => {
       })
     })
   })
-  test('TC-013 Verify product quantity in cart', async ({
-    page,
-  }) => {
+  test('TC-013 Verify product quantity in cart', async ({ page }) => {
     const homepage = new HomePage(page)
     const productDetailsPage = new ProductDetailsPage(page)
     const cartModalComponent = new CartModalComponent(page)
     const cartPage = new CartPage(page)
     await test.step('View product details from homepage, and verify that product details was opened', async () => {
-        await homepage.viewFirstProduct.click()
-        await expect(page).toHaveURL(AppUrls.PRODUCT_DETAILS)
+      await homepage.viewNthProductDetails(0)
+      await expect(page).toHaveURL(AppUrls.PRODUCT_DETAILS)
     })
 
     await test.step('Increase item quantity to 4, add to cart and verify the ammount', async () => {
-        await productDetailsPage.productQuantity.fill('4')
-        await productDetailsPage.addToCartButton.click()
-        await cartModalComponent.viewCartLink.click()
-        let {quantity: quantityOfItemInsideCart} = await cartPage.checkCartItemDetails()
-        expect(quantityOfItemInsideCart).toEqual('4')
+      await productDetailsPage.productQuantity.fill('4')
+      await productDetailsPage.addToCartButton.click()
+      await cartModalComponent.viewCartLink.click()
+      let { quantity: quantityOfItemInsideCart } =
+        await cartPage.checkCartItemDetails()
+      expect(quantityOfItemInsideCart).toEqual('4')
+    })
+  })
 
+  test('TC-017 Remove products from cart', async ({ page }) => {
+    const homepage = new HomePage(page)
+    const cartPage = new CartPage(page)
+    let firstItemAddedToCart: { description: string; price: string }
+    let secondItemAddedToCart: { description: string; price: string }
 
+    await test.step('Add two different products to cart from homepage', async () => {
+      firstItemAddedToCart = await homepage.addNthItemToCart(0)
+      await homepage.cartModalComponent.continueShoppingButton.click()
+
+      secondItemAddedToCart = await homepage.addNthItemToCart(1)
+      await homepage.cartModalComponent.viewCartLink.click()
     })
 
-   
+    await test.step('Remove one of the previously added products from cart', async () => {
+      let { deleteLocator } = await cartPage.checkCartItemDetails(
+        secondItemAddedToCart.description
+      )
+      await deleteLocator.click()
+
+      await expect
+        .poll(
+          async () => {
+            return await cartPage.verifyItemsExistInCart(
+              secondItemAddedToCart.description
+            )
+          },
+          { timeout: 5000 }
+        )
+        .toBeFalsy()
+
+      expect(
+        await cartPage.verifyItemsExistInCart(firstItemAddedToCart.description)
+      ).toBeTruthy()
+    })
   })
 })

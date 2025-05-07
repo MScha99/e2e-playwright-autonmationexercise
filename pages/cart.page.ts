@@ -5,6 +5,7 @@ interface CartItem {
   price: string
   quantity: string
   totalPrice: string
+  deleteLocator: Locator
 }
 
 export class CartPage {
@@ -57,6 +58,9 @@ export class CartPage {
       await cartItemRow.locator('.cart_total').textContent()
     )?.trim()
 
+    const deleteLocator = cartItemRow.locator('.cart_quantity_delete')
+    // const deleteLocato2r = this.page.getByRole('row').filter({ hasNotText: 'description' }).first().locator('.cart_quantity_delete')
+
     if (!description || !price || !quantity || !totalPrice) {
       throw new Error('Failed to extract product details')
     }
@@ -65,6 +69,7 @@ export class CartPage {
       price,
       quantity,
       totalPrice,
+      deleteLocator
     }
   }
 
