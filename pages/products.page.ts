@@ -41,7 +41,10 @@ export class ProductsPage {
   async searchForProduct(query: string) {
     await this.searchProductField.fill(query)
     await expect(this.searchProductButton).toBeVisible()
-    await this.searchProductButton.click()
+    await expect(async () => {
+      await this.searchProductButton.click()
+      await expect(this.searchedProductsHeading).toBeVisible()
+    }).toPass()
   }
 
   async verifySearchResultsAgainstQuery(query: string) {

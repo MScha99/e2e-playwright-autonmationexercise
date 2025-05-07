@@ -73,7 +73,6 @@ test.describe('Browsing, inspecting and reviewing products', () => {
 
 test('TC-018 View Category Products from Homepage', async ({ page }) => {
   const homepage = new HomePage(page)
-  
 
   await test.step('Click on category (Women), then on a subcategory (dress), and verify that correct heading is displayed', async () => {
     await expect(homepage.categoryComponent.categoryList).toBeVisible()
@@ -184,7 +183,6 @@ test.describe('Cart functionality', () => {
     })
 
     await test.step('Increase item quantity to 4, add to cart and verify the ammount', async () => {
-
       await productDetailsPage.productQuantity.fill('4')
       await productDetailsPage.addToCartButton.click()
       await cartModalComponent.viewCartLink.click()
@@ -212,19 +210,20 @@ test.describe('Cart functionality', () => {
       let { deleteLocator } = await cartPage.checkCartItemDetails(
         secondItemAddedToCart.description
       )
-      await expect(deleteLocator).toBeVisible()
-      await deleteLocator.click()
-
-      await expect
-        .poll(
-          async () => {
-            return await cartPage.verifyItemsExistInCart(
-              secondItemAddedToCart.description
-            )
-          },
-          { timeout: 5000 }
-        )
-        .toBeFalsy()
+      await expect(async () => {
+        await expect(deleteLocator).toBeVisible()
+        await deleteLocator.click()
+        await expect
+          .poll(
+            async () => {
+              return await cartPage.verifyItemsExistInCart(
+                secondItemAddedToCart.description
+              )
+            },
+            { timeout: 5000 }
+          )
+          .toBeFalsy()
+      }).toPass()
 
       expect(
         await cartPage.verifyItemsExistInCart(firstItemAddedToCart.description)
