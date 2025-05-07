@@ -31,9 +31,10 @@ export class HomePage {
     nth: number
   ): Promise<{ description: string; price: string }> {
     const singleProductCell = this.page.locator('.single-products').nth(nth)
+    await expect(singleProductCell).toBeVisible()
 
     await singleProductCell.evaluate((el) => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      el.scrollIntoView({  block: 'start' })
     })
 
     await singleProductCell.hover({ trial: true })
@@ -41,7 +42,7 @@ export class HomePage {
       state: 'attached',
       timeout: 5000,
     })
-    await singleProductCell.hover({ force: true })
+    await singleProductCell.hover()
 
     const description = await singleProductCell
       .locator('.overlay-content > p')
@@ -54,22 +55,19 @@ export class HomePage {
         .textContent()
     )?.trim()
 
-    // await singleProductCell.locator('.overlay-content').getByRole('button', {name: 'Add to cart'}).click()
-    // await singleProductCell.getByRole('button', {name: 'Add to cart'}).click()
     await singleProductCell.evaluate((el) => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      el.scrollIntoView({  block: 'start' })
     })
-
-    await singleProductCell.hover({ force: true })
-    await singleProductCell.hover({ force: true })
-    await this.page.waitForSelector('.product-overlay:visible', {
-      state: 'attached',
-      timeout: 5000,
-    })
+    
     await singleProductCell
       .locator('.overlay-content a.add-to-cart')
-      .click({ force: true })
+      .click()
     await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
+
+    await this.page.waitForSelector('.product-overlay', {
+      state: 'hidden',
+      timeout: 5000,
+    })
 
     if (!description || !price) {
       throw new Error('Failed to extract product details')
@@ -84,11 +82,11 @@ export class HomePage {
     nth: number
   ): Promise<{ description: string; price: string }> {
     //test
-    const singleProductCell2 = this.page
-      .getByText('recommended items Rs. 500')
-      .locator('.single-products')
-      .nth(0)
-      .getByText('Add to cart')
+    // const singleProductCell2 = this.page
+    //   .getByText('recommended items Rs. 500')
+    //   .locator('.single-products')
+    //   .nth(0)
+    //   .getByText('Add to cart')
 
     await expect(this.page.getByText('recommended items Rs. 500')).toBeVisible()
     const singleProductCell = this.page
@@ -103,9 +101,7 @@ export class HomePage {
       await singleProductCell.getByRole('heading').textContent()
     )?.trim()
 
-    await singleProductCell
-      .getByText('Add to cart')
-      .click()
+    await singleProductCell.getByText('Add to cart').click()
     await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
 
     if (!description || !price) {

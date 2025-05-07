@@ -11,6 +11,7 @@ import { enableAdblock } from '../../utils/adblock'
 //TC-006 contact us form
 //TC-007 test cases page
 test.beforeEach(async ({ page }) => {
+  await enableAdblock(page)
   await page.goto(AppUrls.BASE_URL)
 })
 
@@ -57,9 +58,9 @@ test.describe('Subscription functionality', () => {
 })
 
 test.describe('Scrolling functionality', () => {
-  test.beforeEach(async ({ page }) => {
-    await enableAdblock(page)
-  })
+  // test.beforeEach(async ({ page }) => {
+  //   await enableAdblock(page)
+  // })
   test('TC-025 Verify Scroll Up using Arrow button and Scroll Down functionality', async ({
     page,
   }) => {

@@ -7,8 +7,10 @@ import { products } from '../../config/test_data'
 import { HomePage } from '../../pages/home.page'
 import { CartPage } from '../../pages/cart.page'
 import { CartModalComponent } from '../../components/cart-modal.component'
+import { enableAdblock } from '../../utils/adblock'
 
 test.beforeEach(async ({ page }) => {
+  await enableAdblock(page)
   await page.goto(AppUrls.BASE_URL)
 })
 
@@ -71,9 +73,13 @@ test.describe('Browsing, inspecting and reviewing products', () => {
 
 test('TC-018 View Category Products from Homepage', async ({ page }) => {
   const homepage = new HomePage(page)
+  
 
   await test.step('Click on category (Women), then on a subcategory (dress), and verify that correct heading is displayed', async () => {
     await expect(homepage.categoryComponent.categoryList).toBeVisible()
+    await homepage.categoryComponent.categoryList.evaluate((el) => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
     const categoryName =
       await homepage.categoryComponent.selectNthProductCategory(0)
     const subcategoryName =
@@ -111,10 +117,6 @@ test('TC-019 View Brand Products from Products page', async ({ page }) => {
 })
 
 test.describe('Cart functionality', () => {
-  test.beforeEach(async ({ page }) => {
-    // await enableAdblock(page)
-  })
-
   test('TC-012 Add product in cart', async ({ page }) => {
     const headerComponent = new HeaderComponent(page)
     const productsPage = new ProductsPage(page)
@@ -182,6 +184,7 @@ test.describe('Cart functionality', () => {
     })
 
     await test.step('Increase item quantity to 4, add to cart and verify the ammount', async () => {
+
       await productDetailsPage.productQuantity.fill('4')
       await productDetailsPage.addToCartButton.click()
       await cartModalComponent.viewCartLink.click()
@@ -209,6 +212,7 @@ test.describe('Cart functionality', () => {
       let { deleteLocator } = await cartPage.checkCartItemDetails(
         secondItemAddedToCart.description
       )
+      await expect(deleteLocator).toBeVisible()
       await deleteLocator.click()
 
       await expect

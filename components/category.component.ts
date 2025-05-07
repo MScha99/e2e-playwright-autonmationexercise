@@ -9,6 +9,7 @@ export class CategoryComponent {
   readonly categoryAndSubcategoryHeading: Locator
 
   constructor(page: Page) {
+    this.page = page
     this.categoryList = page.locator('.panel-group.category-products')
 
     this.categoryWomen = page
@@ -28,18 +29,33 @@ export class CategoryComponent {
   }
 
   async selectNthProductCategory(nth = 0): Promise<string> {
+    await this.categoryList.scrollIntoViewIfNeeded()
+
     const nthElement = this.categoryOfProducts.nth(nth)
     // console.log('Selected Category:', await nthElement.textContent())
     await this.categoryOfProducts.nth(nth).click()
-    const subcategoryName = await nthElement.textContent()
-    return subcategoryName!.trim() //category name
+    await this.page.waitForSelector('.panel-collapse.in', {
+      state: 'visible',
+      timeout: 5000,
+    })
+
+    const categoryName = await nthElement.textContent()
+
+    return categoryName!.trim() //category name
   }
 
   async selectNthProductSubcategory(nth = 0): Promise<string> {
+    await this.page.waitForSelector('.panel-collapse.in', {
+      state: 'visible',
+      timeout: 5000,
+    })
     const nthElement = this.subcategoryOfProducts.nth(nth)
+    await expect(nthElement).toBeVisible()
     // console.log('Selected subCategory:', await nthElement.textContent())
     const subcategoryName = await nthElement.textContent()
+
     await this.subcategoryOfProducts.nth(nth).click()
+
     return subcategoryName!.trim()
   }
 

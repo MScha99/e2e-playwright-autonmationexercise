@@ -1,51 +1,49 @@
-import { fullLists, PlaywrightBlocker } from '@ghostery/adblocker-playwright'
-import fetch from 'cross-fetch'
-import { Page } from 'playwright'
+import { fullLists, PlaywrightBlocker } from '@ghostery/adblocker-playwright';
+import fetch from 'cross-fetch';
+import type { Page } from 'playwright';
 
-let blockerInstance: PlaywrightBlocker | null = null
+let sharedBlocker: PlaywrightBlocker | null = null;
 
-export async function enableAdblock(page: Page): Promise<void> {
-  if (!blockerInstance) {
-    blockerInstance = await PlaywrightBlocker.fromLists(fetch, fullLists, {
-      enableCompression: true,
-    })
+export async function enableAdblock(page: Page) {
+  if (!sharedBlocker) {
+    sharedBlocker = await PlaywrightBlocker.fromLists(fetch, fullLists, { enableCompression: true });
   }
-
-  await blockerInstance.enableBlockingInPage(page)
+  await sharedBlocker.enableBlockingInPage(page);
 
   // Remove/hide ad elements forcibly
-  await page.addStyleTag({
-    content: `
-        ins.adsbygoogle,
-        iframe[src*="doubleclick.net"],
-        div[id^="aswift_"],
-        [id^="google_ads_iframe"],
-        [id^="aswift_"],
-        [class*="adsbygoogle"] {
-          display: none !important;
-          visibility: hidden !important;
-          height: 0 !important;
-          width: 0 !important;
-          position: absolute !important;
-          z-index: -1 !important;
-        }
-      `,
-  })
+  // await page.addStyleTag({
+  //   content: `
+  //       ins.adsbygoogle,
+  //       iframe[src*="doubleclick.net"],
+  //       div[id^="aswift_"],
+  //       [id^="google_ads_iframe"],
+  //       [id^="aswift_"],
+  //       [class*="adsbygoogle"] {
+  //         display: none !important;
+  //         visibility: hidden !important;
+  //         height: 0 !important;
+  //         width: 0 !important;
+  //         position: absolute !important;
+  //         z-index: -1 !important;
+  //       }
+  //     `,
+  // })
 
   // Watch and remove dynamically added elements
-  await page.addInitScript(() => {
-    const removeAds = () => {
-      document
-        .querySelectorAll('ins.adsbygoogle, iframe[src*="doubleclick.net"]')
-        .forEach((el) => el.remove())
-    }
+  // await page.addInitScript(() => {
+  //   const removeAds = () => {
+  //     document
+  //       .querySelectorAll('ins.adsbygoogle, iframe[src*="doubleclick.net"]')
+  //       .forEach((el) => el.remove())
+  //   }
 
-    removeAds()
+  //   removeAds()
 
-    const observer = new MutationObserver(removeAds)
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    })
-  })
+  //   const observer = new MutationObserver(removeAds)
+  //   observer.observe(document.body, {
+  //     childList: true,
+  //     subtree: true,
+  //   })
+  // })
+
 }

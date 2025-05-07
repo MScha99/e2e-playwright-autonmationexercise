@@ -35,11 +35,12 @@ export class ProductsPage {
     //   .nth(0)
     //   .locator('.btn btn-default add-to-cart')
 
-     this.singleProductCell = this.page.locator('.single-products')
+    this.singleProductCell = this.page.locator('.single-products')
   }
 
   async searchForProduct(query: string) {
     await this.searchProductField.fill(query)
+    await expect(this.searchProductButton).toBeVisible()
     await this.searchProductButton.click()
   }
 
@@ -56,49 +57,95 @@ export class ProductsPage {
       texts.every((text) => text.toLowerCase().includes(lowerQuery))
     ).toBeTruthy()
   }
+  // async addNthItemToCart(
+  //   nth: number
+  // ): Promise<{ description: string; price: string }> {
+  //   const singleProductCell = this.page.locator('.single-products').nth(nth)
+  //   await expect(singleProductCell).toBeVisible()
+
+  //   await singleProductCell.evaluate((el) => {
+  //     el.scrollIntoView({ block: 'start' })
+  //   })
+
+  //   const overlay = single.locator('.product-overlay')
+
+  //   await singleProductCell.hover({ trial: true })
+  //   await this.page.waitForSelector('.product-overlay:visible', {
+  //     state: 'attached',
+  //     timeout: 5000,
+  //   })
+  //   await singleProductCell.hover({ force: true })
+
+  //   const description = await singleProductCell
+  //     .locator('.overlay-content > p')
+  //     .textContent()
+
+  //   const price = (
+  //     await singleProductCell
+  //       .locator('.overlay-content')
+  //       .getByRole('heading')
+  //       .textContent()
+  //   )?.trim()
+
+  //   await singleProductCell.locator('.overlay-content a.add-to-cart').click()
+  //   await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
+
+  //   // await this.page.waitForSelector('.product-overlay', {
+  //   //   state: 'hidden',
+  //   //   timeout: 5000,
+  //   // })
+  //   const single = this.page.locator('.single-products').nth(nth)
+  //   const overlay = single.locator('.product-overlay')
+  //   // wait for *that* cell’s overlay to hide
+  //   await overlay.waitFor({ state: 'hidden', timeout: 5000 })
+
+  //   if (!description || !price) {
+  //     throw new Error('Failed to extract product details')
+  //   }
+  //   return {
+  //     description,
+  //     price,
+  //   }
+  // }
   async addNthItemToCart(
     nth: number
   ): Promise<{ description: string; price: string }> {
     const singleProductCell = this.page.locator('.single-products').nth(nth)
+    await expect(singleProductCell).toBeVisible()
 
     await singleProductCell.evaluate((el) => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      el.scrollIntoView({ block: 'start' })
     })
 
-    await singleProductCell.hover({ trial: true })
-    await this.page.waitForSelector('.product-overlay:visible', {
-      state: 'attached',
+    const overlay = singleProductCell.locator('.product-overlay')
+
+    await singleProductCell.hover()
+
+    await overlay.waitFor({
+      state: 'visible',
       timeout: 5000,
     })
-    await singleProductCell.hover({ force: true })
 
-    const description = await singleProductCell
-      .locator('.overlay-content > p')
-      .textContent()
+    const descLoc = overlay.locator('.overlay-content > p')
+    const priceLoc = overlay.getByRole('heading')
+    await expect(descLoc).toBeVisible()
+    await expect(priceLoc).toBeVisible()
+    const description = (await descLoc.textContent())!.trim()
+    const price = (await priceLoc.textContent())!.trim()
 
-    const price = (
-      await singleProductCell
-        .locator('.overlay-content')
-        .getByRole('heading')
-        .textContent()
-    )?.trim()
+    const addBtn = overlay.locator('a.add-to-cart')
 
-    // await singleProductCell.locator('.overlay-content').getByRole('button', {name: 'Add to cart'}).click()
-    // await singleProductCell.getByRole('button', {name: 'Add to cart'}).click()
+    await expect(addBtn).toBeVisible()
+
     await singleProductCell.evaluate((el) => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      el.scrollIntoView({ block: 'start' })
     })
 
-    await singleProductCell.hover({ force: true })
-    await singleProductCell.hover({ force: true })
-    await this.page.waitForSelector('.product-overlay:visible', {
-      state: 'attached',
-      timeout: 5000,
-    })
-    await singleProductCell
-      .locator('.overlay-content a.add-to-cart')
-      .click({ force: true })
+    await addBtn.click()
+    await this.page.mouse.move(0, 0)
     await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
+
+    await overlay.waitFor({ state: 'hidden', timeout: 5_000 })
 
     if (!description || !price) {
       throw new Error('Failed to extract product details')

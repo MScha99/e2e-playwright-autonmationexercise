@@ -3,7 +3,7 @@ import { AccountInformation, generateUniqueEmail } from '../../config/test_data'
 import { HeaderComponent } from '../../components/header.component'
 import { AppUrls } from '../../config/urls'
 import { SignupLoginPage } from '../../pages/signup-login.page'
-
+import { enableAdblock } from '../../utils/adblock'
 import { AccountDeletedPage } from '../../pages/account-deleted.page'
 import { deleteUserAccount, createUserAccount } from '../../utils/accountUtils'
 
@@ -19,6 +19,7 @@ test.describe('Login and logout user', () => {
 
   //register account in the system to be used by login tests, then proceed to login page
   test.beforeEach(async ({ page }) => {
+    await enableAdblock(page)
     headerComponent = new HeaderComponent(page)
 
     await page.goto(AppUrls.BASE_URL)

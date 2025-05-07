@@ -1,18 +1,32 @@
-import { test, expect } from '@playwright/test';
+// import { test, expect } from '@playwright/test'
+// import { enableAdblock } from '../../utils/adblock'
+// import { HomePage } from '../../pages/home.page'
+// import { ProductsPage } from '../../pages/products.page'
+// import { AppUrls } from '../../config/urls'
+// import { HeaderComponent } from '../../components/header.component'
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+// test('homepage', async ({ page }) => {
+//   await page.goto(AppUrls.BASE_URL)
+//   await enableAdblock(page)
+// })
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+// test('homepage2', async ({ page }) => {
+//   await enableAdblock(page)
+//   await page.goto(AppUrls.BASE_URL)
+// })
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+// test('products', async ({ page }) => {
+//   await page.goto(AppUrls.BASE_URL)
+//   await enableAdblock(page)
+//   const headerComponent = new HeaderComponent(page)
+//   await headerComponent.productPageLink.click()
+// })
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+// test('products2', async ({ page }) => {
+//   await enableAdblock(page)
+//   await page.goto(AppUrls.BASE_URL)
+//   const headerComponent = new HeaderComponent(page)
+//   await headerComponent.productPageLink.click()
+// })
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+// test('has title', async ({ page }) => {})

@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
-
+import { enableAdblock } from '../../utils/adblock'
 import { AccountInformation, generateUniqueEmail } from '../../config/test_data'
 import { HeaderComponent } from '../../components/header.component'
 import { AppUrls } from '../../config/urls'
@@ -13,6 +13,7 @@ test.describe('Register user', () => {
   let headerComponent: HeaderComponent
 
   test.beforeEach(async ({ page }) => {
+    await enableAdblock(page)
     await page.goto(AppUrls.BASE_URL)
     headerComponent = new HeaderComponent(page)
     signupLoginPage = await headerComponent.openSignupLoginPage()
