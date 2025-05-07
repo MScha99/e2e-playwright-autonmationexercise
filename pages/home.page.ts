@@ -27,7 +27,7 @@ export class HomePage {
     await this.page.getByText('View Product').nth(nth).click()
   }
 
-  async addNthItemToCart(
+  async addNthFeaturedItemToCart(
     nth: number
   ): Promise<{ description: string; price: string }> {
     const singleProductCell = this.page.locator('.single-products').nth(nth)
@@ -69,6 +69,43 @@ export class HomePage {
     await singleProductCell
       .locator('.overlay-content a.add-to-cart')
       .click({ force: true })
+    await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
+
+    if (!description || !price) {
+      throw new Error('Failed to extract product details')
+    }
+    return {
+      description,
+      price,
+    }
+  }
+
+  async addNthRecommendedItemToCart(
+    nth: number
+  ): Promise<{ description: string; price: string }> {
+    //test
+    const singleProductCell2 = this.page
+      .getByText('recommended items Rs. 500')
+      .locator('.single-products')
+      .nth(0)
+      .getByText('Add to cart')
+
+    await expect(this.page.getByText('recommended items Rs. 500')).toBeVisible()
+    const singleProductCell = this.page
+      .getByText('recommended items Rs. 500')
+      .locator('.single-products')
+      .nth(nth)
+    await singleProductCell.hover()
+
+    const description = await singleProductCell.locator('p').textContent()
+
+    const price = (
+      await singleProductCell.getByRole('heading').textContent()
+    )?.trim()
+
+    await singleProductCell
+      .getByText('Add to cart')
+      .click()
     await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
 
     if (!description || !price) {

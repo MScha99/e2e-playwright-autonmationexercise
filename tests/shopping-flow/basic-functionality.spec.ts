@@ -6,7 +6,6 @@ import { ProductDetailsPage } from '../../pages/product-details.page'
 import { products } from '../../config/test_data'
 import { HomePage } from '../../pages/home.page'
 import { CartPage } from '../../pages/cart.page'
-import { enableAdblock } from '../../utils/adblock'
 import { CartModalComponent } from '../../components/cart-modal.component'
 
 test.beforeEach(async ({ page }) => {
@@ -199,10 +198,10 @@ test.describe('Cart functionality', () => {
     let secondItemAddedToCart: { description: string; price: string }
 
     await test.step('Add two different products to cart from homepage', async () => {
-      firstItemAddedToCart = await homepage.addNthItemToCart(0)
+      firstItemAddedToCart = await homepage.addNthFeaturedItemToCart(0)
       await homepage.cartModalComponent.continueShoppingButton.click()
 
-      secondItemAddedToCart = await homepage.addNthItemToCart(1)
+      secondItemAddedToCart = await homepage.addNthFeaturedItemToCart(1)
       await homepage.cartModalComponent.viewCartLink.click()
     })
 
@@ -225,6 +224,25 @@ test.describe('Cart functionality', () => {
 
       expect(
         await cartPage.verifyItemsExistInCart(firstItemAddedToCart.description)
+      ).toBeTruthy()
+    })
+  })
+
+  test('TC-022 Add to cart from recommended items on homepage', async ({
+    page,
+  }) => {
+    const homepage = new HomePage(page)
+    const cartPage = new CartPage(page)
+    let itemAddedToCart: { description: string; price: string }
+
+    await test.step('Add first recommended product to cart', async () => {
+      itemAddedToCart = await homepage.addNthRecommendedItemToCart(0)
+      await homepage.cartModalComponent.viewCartLink.click()
+    })
+
+    await test.step('Verify that product is displayed in cart', async () => {
+      expect(
+        await cartPage.verifyItemsExistInCart(itemAddedToCart.description)
       ).toBeTruthy()
     })
   })

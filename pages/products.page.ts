@@ -14,7 +14,8 @@ export class ProductsPage {
   readonly categoryComponent: CategoryComponent
   readonly brandComponent: BramdComponent
   readonly cartModalComponent: CartModalComponent
-  readonly testowy: Locator
+  // readonly testowy: Locator
+  readonly singleProductCell: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -29,10 +30,12 @@ export class ProductsPage {
     })
     this.searchProductButton = page.getByRole('button', { name: '' })
     this.searchedProductsHeading = page.getByText('SEARCHED PRODUCTS')
-    this.testowy = this.page
-      .locator('.single-products')
-      .nth(0)
-      .locator('.btn btn-default add-to-cart')
+    // this.testowy = this.page
+    //   .locator('.single-products')
+    //   .nth(0)
+    //   .locator('.btn btn-default add-to-cart')
+
+     this.singleProductCell = this.page.locator('.single-products')
   }
 
   async searchForProduct(query: string) {
