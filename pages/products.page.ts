@@ -70,14 +70,16 @@ export class ProductsPage {
     await singleProductCell.hover({ force: true })
 
     const description = await singleProductCell
-    .locator('.overlay-content > p')
-    .textContent()
-
-    const price = await singleProductCell
-      .locator('.overlay-content')
-      .getByRole('heading')
+      .locator('.overlay-content > p')
       .textContent()
-  
+
+    const price = (
+      await singleProductCell
+        .locator('.overlay-content')
+        .getByRole('heading')
+        .textContent()
+    )?.trim()
+
     // await singleProductCell.locator('.overlay-content').getByRole('button', {name: 'Add to cart'}).click()
     // await singleProductCell.getByRole('button', {name: 'Add to cart'}).click()
     await singleProductCell.evaluate((el) => {

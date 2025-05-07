@@ -31,8 +31,11 @@ export class CartPage {
     this.cartItemRemove = page.locator('.cart_delete').first()
   }
 
-  async checkCartItemDetails(itemName: string): Promise<CartItem> {
-    const cartItemRow = this.page.getByRole('row', { name: itemName })
+  async checkCartItemDetails(itemName?: string): Promise<CartItem> {
+    // If itemName is not provided, use the first cart item row
+    const cartItemRow = itemName
+      ? this.page.getByRole('row', { name: itemName })
+      : this.page.getByRole('row').filter({ hasNotText: 'description' }).first()
 
     const description = await cartItemRow
       .locator('.cart_description')
@@ -43,9 +46,16 @@ export class CartPage {
     //   .locator('.cart_description')
     //   .getByRole('heading')
     //   .textContent()
-    const price = await cartItemRow.locator('.cart_price').textContent()
-    const quantity = await cartItemRow.locator('.cart_quantity').textContent()
-    const totalPrice = await cartItemRow.locator('.cart_total').textContent()
+    const price = (
+      await cartItemRow.locator('.cart_price').textContent()
+    )?.trim()
+
+    const quantity = (
+      await cartItemRow.locator('.cart_quantity').textContent()
+    )?.trim()
+    const totalPrice = (
+      await cartItemRow.locator('.cart_total').textContent()
+    )?.trim()
 
     if (!description || !price || !quantity || !totalPrice) {
       throw new Error('Failed to extract product details')

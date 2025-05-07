@@ -14,6 +14,8 @@ export class ProductDetailsPage {
   readonly reviewTextField: Locator
   readonly submitReviewButton: Locator
   readonly reviewSubmitConfirmationText: Locator
+  readonly productQuantity: Locator
+  readonly addToCartButton: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -34,5 +36,7 @@ export class ProductDetailsPage {
     this.reviewTextField = page.getByRole('textbox', { name: 'Add Review Here!' })
     this.submitReviewButton = page.getByRole('button', { name: 'Submit' })
     this.reviewSubmitConfirmationText = page.getByText('Thank you for your review')
+    this.productQuantity = page.getByRole('spinbutton')
+    this.addToCartButton = page.getByRole('button', { name: ' Add to cart' })
   }
 }

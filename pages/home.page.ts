@@ -6,6 +6,7 @@ export class HomePage {
   readonly copyrightInfo: Locator
   readonly automationExerciseCarouselSlider: Locator
   readonly categoryComponent: CategoryComponent
+  readonly viewFirstProduct: Locator
   
 
   constructor(page: Page) {
@@ -15,6 +16,7 @@ export class HomePage {
     this.automationExerciseCarouselSlider = page.getByRole('heading', {
       name: 'Full-Fledged practice website',
     })
+    this.viewFirstProduct = page.getByText('View Product').first()
   
 
   }

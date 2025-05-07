@@ -7,6 +7,7 @@ import { products } from '../../config/test_data'
 import { HomePage } from '../../pages/home.page'
 import { CartPage } from '../../pages/cart.page'
 import { enableAdblock } from '../../utils/adblock'
+import { CartModalComponent } from '../../components/cart-modal.component'
 
 test.beforeEach(async ({ page }) => {
   await page.goto(AppUrls.BASE_URL)
@@ -134,25 +135,65 @@ test.describe('Cart functionality', () => {
     })
 
     await test.step('verify both products were added to cart with correct details', async () => {
-      let { description: nameOfItemInsideCart } =
-        await cartPage.checkCartItemDetails(firstItemAddedToCart.description)
+      //first product
+      let {
+        description: nameOfItemInsideCart,
+        price: priceOfItemInsideCart,
+        totalPrice: totalPriceOfItemInsideCart,
+      } = await cartPage.checkCartItemDetails(firstItemAddedToCart.description)
 
-      expect(nameOfItemInsideCart).toBe(firstItemAddedToCart.description)
+      //verify that the details of item added to cart are the same as the contents of cart
+      expect({
+        name: nameOfItemInsideCart,
+        price: priceOfItemInsideCart,
+        totalPrice: totalPriceOfItemInsideCart,
+      }).toEqual({
+        name: firstItemAddedToCart.description,
+        price: firstItemAddedToCart.price,
+        totalPrice: firstItemAddedToCart.price,
+      })
 
-      let { description: nameOfAnotherItemInsideCart } =
-        await cartPage.checkCartItemDetails(secondItemAddedToCart.description)
+      //second product
+      let {
+        description: nameOfAnotherItemInsideCart,
+        price: priceOfAnotherItemInsideCart,
+        totalPrice: totalPriceOfAnotherItemInsideCart,
+      } = await cartPage.checkCartItemDetails(secondItemAddedToCart.description)
 
-      expect(nameOfAnotherItemInsideCart).toBe(
-        secondItemAddedToCart.description
-      )
+      //verify that the details of item added to cart are the same as the contents of cart
+      expect({
+        name: nameOfAnotherItemInsideCart,
+        price: priceOfAnotherItemInsideCart,
+        totalPrice: totalPriceOfAnotherItemInsideCart,
+      }).toEqual({
+        name: secondItemAddedToCart.description,
+        price: secondItemAddedToCart.price,
+        totalPrice: secondItemAddedToCart.price,
+      })
     })
   })
-  test('TC003 Login User with incorrect email and password', async ({
+  test('TC-013 Verify product quantity in cart', async ({
     page,
   }) => {
-    await test.step('todo', async () => {})
-    await test.step('todo', async () => {})
+    const homepage = new HomePage(page)
+    const productDetailsPage = new ProductDetailsPage(page)
+    const cartModalComponent = new CartModalComponent(page)
+    const cartPage = new CartPage(page)
+    await test.step('View product details from homepage, and verify that product details was opened', async () => {
+        await homepage.viewFirstProduct.click()
+        await expect(page).toHaveURL(AppUrls.PRODUCT_DETAILS)
+    })
 
-    await test.step('todo', async () => {})
+    await test.step('Increase item quantity to 4, add to cart and verify the ammount', async () => {
+        await productDetailsPage.productQuantity.fill('4')
+        await productDetailsPage.addToCartButton.click()
+        await cartModalComponent.viewCartLink.click()
+        let {quantity: quantityOfItemInsideCart} = await cartPage.checkCartItemDetails()
+        expect(quantityOfItemInsideCart).toEqual('4')
+
+
+    })
+
+   
   })
 })
