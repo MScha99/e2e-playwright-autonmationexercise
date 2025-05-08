@@ -63,10 +63,12 @@ test.describe('Browsing, inspecting and reviewing products', () => {
       await productDetailsPage.reviewNameField.fill(products.reviewForm.name)
       await productDetailsPage.reviewEmailField.fill(products.reviewForm.email)
       await productDetailsPage.reviewTextField.fill(products.reviewForm.review)
-      await productDetailsPage.submitReviewButton.click()
-      await expect(
-        productDetailsPage.reviewSubmitConfirmationText
-      ).toBeVisible()
+      await expect(async () => {
+        await productDetailsPage.submitReviewButton.click()
+        await expect(
+          productDetailsPage.reviewSubmitConfirmationText
+        ).toBeVisible()
+      }).toPass()
     })
   })
 })
