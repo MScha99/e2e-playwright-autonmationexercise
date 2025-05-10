@@ -4,13 +4,18 @@ import { SignupLoginPage } from '../pages/signup-login.page'
 import { AccountDeletedPage } from '../pages/account-deleted.page'
 import { AccountCreatedPage } from '../pages/account-created.page'
 
-
-//requires to be at the registration page
+/**
+ * Deletes a user account after logging in.
+ * Must be called when on the registration page.
+ * @param page - The Playwright Page object
+ * @param email - User's email for login
+ * @param password - User's password for login
+ */
 export async function deleteUserAccount(
   page: Page,
   email: string,
   password: string
-) {
+): Promise<void> {
   const signupLoginPage = new SignupLoginPage(page)
   const headerComponent = new HeaderComponent(page)
   const accountDeletedPage = new AccountDeletedPage(page)
@@ -22,14 +27,35 @@ export async function deleteUserAccount(
   await accountDeletedPage.continueButton.click()
 }
 
-//requires to be at the registration page
+/**
+ * Creates a new user account with complete registration details.
+ * Must be called when on the registration page.
+ * @param page - The Playwright Page object
+ * @param name - User's display name
+ * @param email - User's email address
+ * @param title - User's title (Mr./Mrs.)
+ * @param password - Account password
+ * @param day - Birth day
+ * @param month - Birth month
+ * @param year - Birth year
+ * @param subscribeNewsletter - Whether to subscribe to newsletter
+ * @param receiveSpecialOffers - Whether to receive special offers
+ * @param firstName - User's first name
+ * @param lastName - User's last name
+ * @param company - User's company
+ * @param address - User's address
+ * @param address2 - User's secondary address
+ * @param country - User's country
+ * @param state - User's state
+ * @param city - User's city
+ * @param zipCode - User's zip code
+ * @param mobileNumber - User's mobile number
+ */
 export async function createUserAccount(
   page: Page,
   name: string,
   email: string,
   title: string,
-  //name: string,
-  // email: string,
   password: string,
   day: string,
   month: string,
@@ -46,7 +72,7 @@ export async function createUserAccount(
   city: string,
   zipCode: string,
   mobileNumber: string
-) {
+): Promise<void> {
   const signupLoginPage = new SignupLoginPage(page)
   const headerComponent = new HeaderComponent(page)
   const accountCreatedPage = new AccountCreatedPage(page)

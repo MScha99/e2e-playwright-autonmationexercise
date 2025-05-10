@@ -3,6 +3,10 @@ import { CategoryComponent } from '../components/category.component'
 import { BramdComponent } from '../components/brand.component.'
 import { CartModalComponent } from '../components/cart-modal.component'
 
+/**
+ * Represents the Products page of the application.
+ * Handles product listing, searching, filtering, and cart interactions.
+ */
 export class ProductsPage {
   readonly page: Page
   readonly productsList: Locator
@@ -14,9 +18,12 @@ export class ProductsPage {
   readonly categoryComponent: CategoryComponent
   readonly brandComponent: BramdComponent
   readonly cartModalComponent: CartModalComponent
-  // readonly testowy: Locator
   readonly singleProductCell: Locator
 
+  /**
+   * Creates an instance of ProductsPage.
+   * @param page - The Playwright Page object
+   */
   constructor(page: Page) {
     this.page = page
     this.categoryComponent = new CategoryComponent(page)
@@ -30,15 +37,14 @@ export class ProductsPage {
     })
     this.searchProductButton = page.getByRole('button', { name: '' })
     this.searchedProductsHeading = page.getByText('SEARCHED PRODUCTS')
-    // this.testowy = this.page
-    //   .locator('.single-products')
-    //   .nth(0)
-    //   .locator('.btn btn-default add-to-cart')
-
     this.singleProductCell = this.page.locator('.single-products')
   }
 
-  async searchForProduct(query: string) {
+  /**
+   * Searches for products using the search functionality.
+   * @param query - The search term to look for
+   */
+  async searchForProduct(query: string): Promise<void> {
     await this.searchProductField.fill(query)
     await expect(this.searchProductButton).toBeVisible()
     await expect(async () => {
@@ -47,69 +53,30 @@ export class ProductsPage {
     }).toPass()
   }
 
-  async verifySearchResultsAgainstQuery(query: string) {
+  /**
+   * Verifies that search results match the search query.
+   * @param query - The search term to verify against
+   */
+  async verifySearchResultsAgainstQuery(query: string): Promise<void> {
     const texts = await this.searchedProductsList
       .locator('p')
       .filter({ hasNotText: 'Your product has been added to cart.' })
       .filter({ hasNotText: 'View Cart' })
       .allTextContents()
-    // console.log('search results: ', texts)
+// console.log('search results: ', texts)
+
     const lowerQuery = query.toLowerCase()
 
     expect(
       texts.every((text) => text.toLowerCase().includes(lowerQuery))
     ).toBeTruthy()
   }
-  // async addNthItemToCart(
-  //   nth: number
-  // ): Promise<{ description: string; price: string }> {
-  //   const singleProductCell = this.page.locator('.single-products').nth(nth)
-  //   await expect(singleProductCell).toBeVisible()
 
-  //   await singleProductCell.evaluate((el) => {
-  //     el.scrollIntoView({ block: 'start' })
-  //   })
-
-  //   const overlay = single.locator('.product-overlay')
-
-  //   await singleProductCell.hover({ trial: true })
-  //   await this.page.waitForSelector('.product-overlay:visible', {
-  //     state: 'attached',
-  //     timeout: 5000,
-  //   })
-  //   await singleProductCell.hover({ force: true })
-
-  //   const description = await singleProductCell
-  //     .locator('.overlay-content > p')
-  //     .textContent()
-
-  //   const price = (
-  //     await singleProductCell
-  //       .locator('.overlay-content')
-  //       .getByRole('heading')
-  //       .textContent()
-  //   )?.trim()
-
-  //   await singleProductCell.locator('.overlay-content a.add-to-cart').click()
-  //   await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
-
-  //   // await this.page.waitForSelector('.product-overlay', {
-  //   //   state: 'hidden',
-  //   //   timeout: 5000,
-  //   // })
-  //   const single = this.page.locator('.single-products').nth(nth)
-  //   const overlay = single.locator('.product-overlay')
-  //   // wait for *that* cell’s overlay to hide
-  //   await overlay.waitFor({ state: 'hidden', timeout: 5000 })
-
-  //   if (!description || !price) {
-  //     throw new Error('Failed to extract product details')
-  //   }
-  //   return {
-  //     description,
-  //     price,
-  //   }
-  // }
+  /**
+   * Adds a product to cart by its position in the list.
+   * @param nth - Zero-based index of the product to add
+   * @returns Promise with the product details including description and price
+   */
   async addNthItemToCart(
     nth: number
   ): Promise<{ description: string; price: string }> {
@@ -147,6 +114,8 @@ export class ProductsPage {
     await addBtn.click()
     await this.page.mouse.move(0, 0)
     await expect(this.cartModalComponent.addedToCartConfirmation).toBeVisible()
+    await overlay.waitFor({ state: 'hidden', timeout: 5_000 })
+
 
     await overlay.waitFor({ state: 'hidden', timeout: 5_000 })
 

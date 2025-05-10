@@ -4,6 +4,13 @@ import type { Page } from 'playwright';
 
 let sharedBlocker: PlaywrightBlocker | null = null;
 
+/**
+ * Enables ad blocking functionality on the page.
+ * This improves test reliability by preventing ad-related interruptions.
+ *
+ * @param page - The Playwright Page object to enable ad blocking on
+ * @returns Promise that resolves when ad blocking is enabled
+ */
 export async function enableAdblock(page: Page) {
   if (!sharedBlocker) {
     sharedBlocker = await PlaywrightBlocker.fromLists(fetch, fullLists, { enableCompression: true });
@@ -45,5 +52,4 @@ export async function enableAdblock(page: Page) {
   //     subtree: true,
   //   })
   // })
-
 }

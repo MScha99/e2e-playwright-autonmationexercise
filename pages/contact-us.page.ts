@@ -1,6 +1,10 @@
 import { type Locator, type Page } from '@playwright/test'
 import path from 'path'
 
+/**
+ * Represents the Contact Us page.
+ * Handles user feedback submission and file upload functionality.
+ */
 export class ContactUsPage {
   readonly page: Page
   readonly contactUsHeading: Locator
@@ -13,6 +17,10 @@ export class ContactUsPage {
   readonly successMessage: Locator
   readonly homeLink: Locator
 
+  /**
+   * Creates an instance of ContactUsPage.
+   * @param page - The Playwright Page object
+   */
   constructor(page: Page) {
     this.page = page
     this.contactUsHeading = page.getByRole('heading', { name: 'Get In Touch' })
@@ -28,16 +36,23 @@ export class ContactUsPage {
     this.homeLink = page.getByRole('link', { name: ' Home' })
   }
 
+  /**
+   * Fills out and submits the contact form.
+   * @param name - User's name
+   * @param email - User's email
+   * @param subject - Message subject
+   * @param message - Message content
+   */
   async fillContactForm(
-    nameField: string,
-    emailField: string,
-    subjectField: string,
-    messageField: string
-  ) {
-    await this.nameField.fill(nameField)
-    await this.emailField.fill(emailField)
-    await this.subjectField.fill(subjectField)
-    await this.messageField.fill(messageField)
+    name: string,
+    email: string,
+    subject: string,
+    message: string
+  ): Promise<void> {
+    await this.nameField.fill(name)
+    await this.emailField.fill(email)
+    await this.subjectField.fill(subject)
+    await this.messageField.fill(message)
     await this.uploadFile.setInputFiles(path.join(__dirname, 'sillyCat.jpg'))
   }
 }

@@ -9,6 +9,11 @@ import { CartPage } from '../../pages/cart.page'
 import { CartModalComponent } from '../../components/cart-modal.component'
 import { enableAdblock } from '../../utils/adblock'
 
+/**
+ * Test suite for core shopping functionality.
+ * Covers product browsing, search, cart management, and basic checkout flow.
+ */
+
 test.beforeEach(async ({ page }) => {
   await enableAdblock(page)
   await page.goto(AppUrls.BASE_URL)
@@ -79,7 +84,7 @@ test('TC-018 View Category Products from Homepage', async ({ page }) => {
   await test.step('Click on category (Women), then on a subcategory (dress), and verify that correct heading is displayed', async () => {
     await expect(homepage.categoryComponent.categoryList).toBeVisible()
     await homepage.categoryComponent.categoryList.evaluate((el) => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      el.scrollIntoView({  block: 'start' })
     })
     const categoryName =
       await homepage.categoryComponent.selectNthProductCategory(0)

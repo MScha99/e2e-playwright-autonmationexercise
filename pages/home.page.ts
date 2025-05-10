@@ -2,6 +2,10 @@ import { expect, type Locator, type Page } from '@playwright/test'
 import { CategoryComponent } from '../components/category.component'
 import { CartModalComponent } from '../components/cart-modal.component'
 
+/**
+ * Represents the Home page of the application.
+ * Handles interactions with the main landing page elements and components.
+ */
 export class HomePage {
   readonly page: Page
   readonly arrowJumpBackUP: Locator
@@ -11,6 +15,10 @@ export class HomePage {
   readonly viewFirstProduct: Locator
   readonly cartModalComponent: CartModalComponent
 
+  /**
+   * Creates an instance of HomePage.
+   * @param page - The Playwright Page object
+   */
   constructor(page: Page) {
     this.page = page
     this.cartModalComponent = new CartModalComponent(page)
@@ -23,10 +31,19 @@ export class HomePage {
     this.viewFirstProduct = page.getByText('View Product').first()
   }
 
-  async viewNthProductDetails(nth: number) {
+  /**
+   * Views the details of a product by its position in the list.
+   * @param nth - Zero-based index of the product to view
+   */
+  async viewNthProductDetails(nth: number): Promise<void> {
     await this.page.getByText('View Product').nth(nth).click()
   }
 
+  /**
+   * Adds a featured product to the cart by its position.
+   * @param nth - Zero-based index of the featured product to add
+   * @returns Promise with the product details including description and price
+   */
   async addNthFeaturedItemToCart(
     nth: number
   ): Promise<{ description: string; price: string }> {
@@ -78,6 +95,11 @@ export class HomePage {
     }
   }
 
+  /**
+   * Adds a recommended product to the cart by its position.
+   * @param nth - Zero-based index of the recommended product to add
+   * @returns Promise with the product details including description and price
+   */
   async addNthRecommendedItemToCart(
     nth: number
   ): Promise<{ description: string; price: string }> {

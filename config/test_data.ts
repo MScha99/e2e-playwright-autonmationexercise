@@ -1,3 +1,7 @@
+/**
+ * Test data for account information.
+ * Contains both valid and invalid test data sets.
+ */
 export const AccountInformation = {
   valid: {
     title: 'Mr.',
@@ -30,19 +34,9 @@ export const AccountInformation = {
   },
 }
 
-export function generateUniqueEmail(baseEmail = 'abecadlo@gmail.com') {
-  const [name, domain] = baseEmail.split('@')
-  return `${name}+${Date.now()}@${domain}`
-}
-
-export const contactUsInformation = {
-  name: 'John Doe',
-  email: 'johndoe@example.com',
-  subject: 'Inquiry about services',
-  message:
-    'I would like to know more about your services. Please provide details.',
-}
-
+/**
+ * Test data for products and reviews.
+ */
 export const products = {
   queryForProductSearch: 'pink',
   reviewForm: {
@@ -53,6 +47,20 @@ export const products = {
   },
 }
 
+/**
+ * Test data for contact form submissions.
+ */
+export const contactUsInformation = {
+  name: 'John Doe',
+  email: 'johndoe@example.com',
+  subject: 'Inquiry about services',
+  message:
+    'I would like to know more about your services. Please provide details.',
+}
+
+/**
+ * Test data for checkout process.
+ */
 export const checkout = {
   comment: 'Please deliver between 9 AM and 12 PM. Thank you!',
   cardDetails: {
@@ -61,6 +69,15 @@ export const checkout = {
     cvc: '123',
     expirationMonth: '12',
     expirationYear: '2025',
+  },
+}
 
-  }
+/**
+ * Generates a unique email address for testing.
+ * Uses timestamp to ensure uniqueness.
+ * @returns A unique email address
+ */
+export function generateUniqueEmail(baseEmail = 'abecadlo@gmail.com') {
+  const [name, domain] = baseEmail.split('@')
+  return `${name}+${Date.now()}@${domain}`
 }

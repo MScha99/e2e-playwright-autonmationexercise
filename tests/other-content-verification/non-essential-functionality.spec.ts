@@ -7,6 +7,11 @@ import { FooterComponent } from '../../components/footer.component'
 import { HomePage } from '../../pages/home.page'
 import { enableAdblock } from '../../utils/adblock'
 
+/**
+ * Test suite for secondary site features.
+ * Covers contact form functionality, page navigation,
+ * subscription features and scrolling behavior.
+ */
 
 //TC-006 contact us form
 //TC-007 test cases page

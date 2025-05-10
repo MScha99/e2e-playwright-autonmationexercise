@@ -7,9 +7,10 @@ import { enableAdblock } from '../../utils/adblock'
 import { AccountDeletedPage } from '../../pages/account-deleted.page'
 import { deleteUserAccount, createUserAccount } from '../../utils/accountUtils'
 
-//TC-002: Login User with correct email and password
-// TC-003: Login User with incorrect email and password
-// TC-004: Logout User
+/**
+ * Test suite for authentication functionality.
+ * Covers login with valid/invalid credentials and logout scenarios.
+ */
 
 test.describe('Login and logout user', () => {
   let signupLoginPage: SignupLoginPage

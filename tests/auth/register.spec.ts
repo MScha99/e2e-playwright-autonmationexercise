@@ -6,7 +6,11 @@ import { AppUrls } from '../../config/urls'
 import { SignupLoginPage } from '../../pages/signup-login.page'
 import { AccountDeletedPage } from '../../pages/account-deleted.page'
 import { createUserAccount } from '../../utils/accountUtils'
-//TC-001: Register User, TC-005: Register User with existing email
+
+/**
+ * Test suite for user registration functionality.
+ * Covers registration with valid credentials and duplicate email scenarios.
+ */
 
 test.describe('Register user', () => {
   let signupLoginPage: SignupLoginPage

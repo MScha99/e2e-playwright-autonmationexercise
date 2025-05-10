@@ -1,31 +1,22 @@
 # Automation Exercise Test Cases
 
-```tests/  
+## Directory Structure
+```
+tests/  
 ├── auth/                         
 │   ├── register.spec.ts        # TC1, TC5  
 │   ├── login.spec.ts           # TC2, TC3  
 │   └── logout.spec.ts          # TC4  
-├── products/  
-│   ├── browsing.spec.ts        # TC8, TC18, TC19
-│   ├── search.spec.ts          # TC9, TC20
-│   └── reviews.spec.ts         # TC21  
-├── cart/  
-│   ├── management.spec.ts      # TC12, TC13, TC17  
-│   └── subscription.spec.ts    # TC10, TC11  
-├── checkout/  
-│   ├── orders.spec.ts          # TC14, TC15, TC16, TC23, TC24  
-│   └── payment.spec.ts  
-├── ui/  
-│   ├── contact.spec.ts         # TC6  
-│   ├── navigation.spec.ts      # TC7, TC25, TC26  
-│   └── recommended.spec.ts     # TC22  
-└── ... 
+├── shopping-flow/ 
+│   ├── basic-functionality.spec.ts    # TC8-13, TC17, TC21, TC22
+│   └── adv-functionality.spec.ts      # TC14-16, TC20, TC23, TC24
+├── other-content-verification/  
+│   └── non-essential-functionality.spec.ts  # TC6, TC7, TC10, TC11, TC25, TC26
 ```
 
+## Core Features
 
-
-
-## User Account Management
+### User Account Management
 
 ### TC-001: Register User
 **Objective**: Verify new user registration functionality

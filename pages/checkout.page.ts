@@ -1,5 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test'
 
+/**
+ * Represents the checkout page.
+ * Handles order review, delivery address verification, and order placement.
+ */
 export class CheckoutPage {
   readonly page: Page
   readonly deliveryAddressHeading: Locator
@@ -19,6 +23,10 @@ export class CheckoutPage {
   readonly commentField: Locator
   readonly placeOrderLink: Locator
 
+  /**
+   * Creates an instance of CheckoutPage.
+   * @param page - The Playwright Page object
+   */
   constructor(page: Page) {
     this.page = page
 
@@ -31,7 +39,6 @@ export class CheckoutPage {
       name: 'your delivery address',
     })
 
-  
     this.addressListLocator = page.getByRole('list').filter({
       has: this.deliveryAddressHeading,
     })
@@ -55,13 +62,17 @@ export class CheckoutPage {
       '.address_country_name'
     )
 
-    this.deliveryAddressPhone =
-      this.addressListLocator.locator('.address_phone')
+    this.deliveryAddressPhone = this.addressListLocator.locator('.address_phone')
 
     this.commentField = page.locator('textarea[name="message"]')
     this.placeOrderLink = page.getByRole('link', { name: 'Place Order' })
   }
 
+  /**
+   * Verifies if specified items exist in the cart.
+   * @param itemNames - Names of items to check for in the cart
+   * @returns Promise<boolean> indicating whether all items were found
+   */
   async verifyItemsExistInCart(...itemNames: string[]): Promise<boolean> {
     const allItemTexts = await this.page
       .locator('.cart_description')
@@ -72,6 +83,20 @@ export class CheckoutPage {
     )
   }
 
+  /**
+   * Verifies the delivery address details match expected values.
+   * @param title - User's title (Mr./Mrs.)
+   * @param company - Company name
+   * @param firstName - First name
+   * @param lastName - Last name
+   * @param address1 - Primary address
+   * @param address2 - Secondary address
+   * @param city - City
+   * @param state - State
+   * @param zipcode - ZIP code
+   * @param country - Country
+   * @param mobileNumber - Mobile phone number
+   */
   async verifyAddressDetails(
     title: string,
     company: string,

@@ -1,6 +1,10 @@
 import { type Locator, type Page } from '@playwright/test'
 import { AccountCreatedPage } from './account-created.page'
 
+/**
+ * Represents the Signup/Login page of the application.
+ * Handles user authentication, registration, and account management functionality.
+ */
 export class SignupLoginPage {
   readonly page: Page
   //login form
@@ -40,6 +44,10 @@ export class SignupLoginPage {
   readonly mobileNumberField: Locator
   readonly createAccountButton: Locator
 
+  /**
+   * Creates an instance of SignupLoginPage.
+   * @param page - The Playwright Page object
+   */
   constructor(page: Page) {
     this.page = page
 
@@ -135,84 +143,62 @@ export class SignupLoginPage {
     ////////////////
   }
 
-  async clickButtonToFinishRegistration() {
+  /**
+   * Completes the account creation process by clicking the button.
+   * @returns Promise with a new AccountCreatedPage instance
+   */
+  async clickButtonToFinishRegistration(): Promise<AccountCreatedPage> {
     await this.createAccountButton.click()
     return new AccountCreatedPage(this.page)
   }
 
-  async fillInitialSignupFormAndSubmit(name: string, email: string) {
+  /**
+   * Fills out and submits the initial signup form.
+   * @param name - Name for the new account
+   * @param email - Email for the new account
+   */
+  async fillInitialSignupFormAndSubmit(
+    name: string,
+    email: string
+  ): Promise<void> {
     await this.signupNameField.fill(name)
     await this.signupEmailField.fill(email)
     await this.signupButton.click()
   }
 
-  async fillLoginFormAndSubmit(email: string, password: string) {
+  /**
+   * Fills out and submits the login form.
+   * @param email - User's email
+   * @param password - User's password
+   */
+  async fillLoginFormAndSubmit(email: string, password: string): Promise<void> {
     await this.loginEmailField.fill(email)
     await this.loginPasswordField.fill(password)
     await this.loginButton.click()
   }
 
-  //   async fillAccountInformation(
-  //     title: string,
-  //     //name: string,
-  //     // email: string,
-  //     password: string,
-  //     day: string,
-  //     month: string,
-  //     year: string,
-  //     subscribeNewsletter: boolean,
-  //     receiveSpecialOffers: boolean
-  //   ) {
-  //     if (title === 'Mr.') {
-  //       await this.radioTitleMr.check()
-  //     } else {
-  //       await this.radioTitleMrs.check()
-  //     }
-  //     //await this.nameField.fill(name)
-  //     // await this.accountInformationEmailField.fill(email)
-  //     await this.accountInformationPasswordField.fill(password)
-  //     await this.birthDayDropdown.selectOption(day)
-  //     await this.monthDayDropdown.selectOption(month)
-  //     await this.yearDayDropdown.selectOption(year)
-
-  //     if (subscribeNewsletter) {
-  //       await this.newsletterCheckbox.check()
-  //     }
-  //     if (receiveSpecialOffers) {
-  //       await this.specialOffersCheckbox.check()
-  //     }
-  //   }
-
-  //   async fillAddressInformation(
-  //     firstName: string,
-  //     lastName: string,
-  //     company: string,
-  //     address: string,
-  //     address2: string,
-  //     country: string,
-  //     state: string,
-  //     city: string,
-  //     zipCode: string,
-  //     mobileNumber: string
-  //   ) {
-  //     await this.firstNameField.fill(firstName)
-  //     await this.lastNameField.fill(lastName)
-  //     await this.companyField.fill(company)
-  //     await this.addressField.fill(address)
-  //     await this.address2Field.fill(address2)
-  //     await this.countryDropdown.selectOption(country)
-  //     await this.stateField.fill(state)
-  //     await this.cityField.fill(city)
-  //     await this.zipCodeField.fill(zipCode)
-  //     await this.mobileNumberField.fill(mobileNumber)
-  //   }
-  // }
-
+  /**
+   * Fills out the complete registration form with all user details.
+   * @param title - User's title (Mr./Mrs.)
+   * @param password - Account password
+   * @param day - Birth day
+   * @param month - Birth month
+   * @param year - Birth year
+   * @param subscribeNewsletter - Whether to subscribe to newsletter
+   * @param receiveSpecialOffers - Whether to receive special offers
+   * @param firstName - User's first name
+   * @param lastName - User's last name
+   * @param company - User's company
+   * @param address - User's address
+   * @param address2 - User's secondary address
+   * @param country - User's country
+   * @param state - User's state
+   * @param city - User's city
+   * @param zipCode - User's zip code
+   * @param mobileNumber - User's mobile number
+   */
   async fillOutRegistrationForm(
-
     title: string,
-    //name: string,
-    // email: string,
     password: string,
     day: string,
     month: string,
@@ -229,7 +215,7 @@ export class SignupLoginPage {
     city: string,
     zipCode: string,
     mobileNumber: string
-  ) {
+  ): Promise<void> {
     if (title === 'Mr.') {
       await this.radioTitleMr.check()
     } else {

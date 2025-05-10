@@ -1,5 +1,9 @@
 import { type Locator, type Page } from '@playwright/test'
 
+/**
+ * Represents the product details page.
+ * Handles display and interaction with detailed product information, reviews, and purchase options.
+ */
 export class ProductDetailsPage {
   readonly page: Page
   readonly productName: Locator
@@ -17,6 +21,10 @@ export class ProductDetailsPage {
   readonly productQuantity: Locator
   readonly addToCartButton: Locator
 
+  /**
+   * Creates an instance of ProductDetailsPage.
+   * @param page - The Playwright Page object
+   */
   constructor(page: Page) {
     this.page = page
     this.productName = page

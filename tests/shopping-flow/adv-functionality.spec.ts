@@ -2,17 +2,14 @@ import { test, expect, type Page } from '@playwright/test'
 import { AppUrls } from '../../config/urls'
 import { HeaderComponent } from '../../components/header.component'
 import { ProductsPage } from '../../pages/products.page'
-import { ProductDetailsPage } from '../../pages/product-details.page'
 import {
   products,
   AccountInformation,
   generateUniqueEmail,
   checkout,
 } from '../../config/test_data'
-import { HomePage } from '../../pages/home.page'
 import { CartPage } from '../../pages/cart.page'
-import { CartModalComponent } from '../../components/cart-modal.component'
-import { deleteUserAccount, createUserAccount } from '../../utils/accountUtils'
+import { createUserAccount } from '../../utils/accountUtils'
 import { enableAdblock } from '../../utils/adblock'
 import { SignupLoginPage } from '../../pages/signup-login.page'
 import { CheckoutPage } from '../../pages/checkout.page'
@@ -20,7 +17,11 @@ import { PaymentPage } from '../../pages/payment.page'
 import { PaymentDonePage } from '../../pages/payment-done.page'
 import { CheckoutModalComponent } from '../../components/checkout-modal.components'
 import { AccountDeletedPage } from '../../pages/account-deleted.page'
-import { Sign } from 'crypto'
+
+/**
+ * Test suite for advanced shopping functionality.
+ * Covers order placement, checkout flows, and user account integration.
+ */
 
 test.beforeEach(async ({ page }) => {
   await enableAdblock(page)
