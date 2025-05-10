@@ -52,3 +52,15 @@ export const products = {
       'Great product! High quality and exactly as described. Highly recommend!',
   },
 }
+
+export const checkout = {
+  comment: 'Please deliver between 9 AM and 12 PM. Thank you!',
+  cardDetails: {
+    nameOnCard: 'John Doe',
+    cardNumber: '4111111111111111',
+    cvc: '123',
+    expirationMonth: '12',
+    expirationYear: '2025',
+
+  }
+}

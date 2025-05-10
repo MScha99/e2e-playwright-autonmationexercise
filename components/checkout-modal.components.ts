@@ -1,6 +1,6 @@
 import { type Locator, type Page } from '@playwright/test'
 
-export class CartModalComponent {
+export class CheckoutModalComponent {
   readonly page: Page
   readonly registerLoginLink: Locator
   readonly continueOnCartButton: Locator

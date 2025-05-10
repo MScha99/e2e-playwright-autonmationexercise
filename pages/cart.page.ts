@@ -20,9 +20,7 @@ export class CartPage {
 
   constructor(page: Page) {
     this.page = page
-    this.proceedToCheckoutButton = page.getByRole('button', {
-      name: 'Proceed To Checkout',
-    })
+    this.proceedToCheckoutButton = page.getByText('Proceed To Checkout')
 
     // this.cartItem = page.getByRole('row').filter({hasNotText: 'item'}).first()
     this.cartItemDescription = page.locator('.cart_description').first()
