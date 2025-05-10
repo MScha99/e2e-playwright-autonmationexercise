@@ -1,5 +1,7 @@
 # Automation Exercise E2E Test Repository
-This repository contains end-to-end Playwright tests for the Automation Exercise online ecommerce web application. The tests implement the test cases specified on the official Automation Exercise Test Cases page.
+This repository contains end-to-end Playwright tests for the Automation Exercise online ecommerce web application. The tests implement the test cases specified on the official Automation Exercise Test Cases page.  
+
+https://www.automationexercise.com/test_cases
 
 
 ## Tech Stack & Dependencies
