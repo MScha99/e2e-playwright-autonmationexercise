@@ -1,4 +1,6 @@
 # Automation Exercise E2E Test Repository
+This repository contains end-to-end Playwright tests for the Automation Exercise online ecommerce web application. The tests implement the test cases specified on the official Automation Exercise Test Cases page.
+
 
 ## Tech Stack & Dependencies
 - Playwright: E2E testing framework
@@ -6,6 +8,10 @@
 - Node.js: Runtime environment
 - Page Object Model (POM): Design pattern for test organization
 - Component Object Pattern: For reusable UI components
+
+## CI Integration & Flakiness Monitoring  
+- GitHub Actions: Every push and pull request triggers this suite via GitHub Actions.  
+- Flakiness Testing: Each test has been run 400 times locally to detect and eliminate intermittent failures. 
 
 ## Architecture Overview
 
@@ -45,8 +51,8 @@
 
 ### Best Practices
 1. **Element Locators**
-   - Prefer data-qa attributes when available
-   - Use role-based selectors for accessibility
+   - Prefer user-facing attributes selectors whenever possible (most realistic) 
+   - Use test-id attributes when needed   
    - Fallback to CSS/XPath when necessary
 
 2. **Test Independence**
@@ -54,10 +60,6 @@
    - Setup/teardown using beforeEach/afterEach
    - Clean state between tests
 
-3. **Error Handling**
-   - Explicit timeouts and wait strategies
-   - Clear error messages
-   - Proper assertion messages
 
 ## Setup & Execution Instructions
 
@@ -94,20 +96,18 @@ npx playwright test --project=chromium
 
 1. **Automatic Wait Strategies**
    - Using proper expect conditions
-   - Explicit waits when needed
    - Smart handling of dynamic content
 
 2. **Rich Assertions**
    - Detailed assertion messages
-   - Visual comparison when needed
    - State verification
 
 3. **Cross-browser Testing**
    - Tests run on multiple browsers
-   - Browser-specific configuration
    - Consistent behavior across browsers
 
 4. **Performance Optimization**
    - Parallel test execution
    - Reused browser contexts
    - Efficient resource handling
+
